@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 from sqlalchemy.orm import Mapped, mapped_column, Relationship
 from db import Base
+from uuid import UUID
 from sqlalchemy import func, ForeignKey
 from decimal import Decimal
 
@@ -13,6 +14,7 @@ class Account(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     owner_name: Mapped[str] = mapped_column()
     balance: Mapped[Decimal] = mapped_column(default=0)
+    #account_id: Mapped[UUID] = mapped_column()
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     #Relationships
