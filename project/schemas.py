@@ -16,3 +16,7 @@ class Showbalance(BaseModel):
 
     class Config:
         from_attributes = True  # Allows Pydantic to read from SQLAlchemy models
+
+class Withdraw(BaseModel):
+    account_id: int
+    money: Decimal
