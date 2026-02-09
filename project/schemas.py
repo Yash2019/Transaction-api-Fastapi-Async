@@ -20,3 +20,17 @@ class Showbalance(BaseModel):
 class Withdraw(BaseModel):
     account_id: int
     money: Decimal
+
+class Transaction(BaseModel):
+    money: Decimal
+    sender_id: int
+    reciever_id: int
+
+class TransationResponce(BaseModel):
+
+    sender_id: int
+    receiver_id: int
+    amount: Decimal
+    sender_new_balance: Decimal
+    status: str
+

@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from project.models import Account
-from project.schemas import Deposit, CreateAccount, Withdraw
+from project.schemas import Deposit, CreateAccount, Withdraw, Transaction
 from sqlalchemy import select
 
 async def create_account(db: AsyncSession,
@@ -56,3 +56,46 @@ async def withdraw(db: AsyncSession, task:Withdraw):
     await db.commit()
     await db.refresh(account)
     return account
+
+async def transaction(db: AsyncSession, task: Transaction):
+    stmt = select(Account).where(Account.id == task.sender_id).with_for_update()
+    result = await db.execute(stmt)
+    sender_account = result.scalars().first()
+
+    stmt = select(Account).where(Account.id == task.reciever_id).with_for_update()
+    result = await db.execute(stmt)
+    reciever_account = result.scalars().first()
+
+    if not sender_account:
+        raise ValueError('Your account was not found create it')
+    
+    if not reciever_account:
+        raise ValueError('Reciever account does not exists')
+    
+    if task.money<=0:
+        raise ValueError('Money cannot be negative or zero')
+    
+    if task.sender_id == task.reciever_id: 
+        raise ValueError('Cannot transfer to same account')
+    
+    if task.money>sender_account.balance:
+        raise ValueError('Less money in the account')
+    
+    sender_account.balance-=task.money
+
+    reciever_account.balance+=task.money
+
+    await db.commit()
+    await db.refresh(sender_account)
+    await db.refresh(reciever_account)
+
+    return {
+        "sender_id": task.sender_id,
+        "receiver_id": task.reciever_id,
+        "amount": task.money,
+        "sender_new_balance": sender_account.balance,
+        "status": "success"
+    }
+
+
+
