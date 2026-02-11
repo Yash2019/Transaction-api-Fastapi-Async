@@ -1,5 +1,7 @@
 venv
 plan.md
-requirements.txt
 .env
 Rules.md
+__pycache__
+*.pyc
+*.db

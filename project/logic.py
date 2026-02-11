@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from project.models import Account
+from project.models import Account, TransactionLog
 from project.schemas import Deposit, CreateAccount, Withdraw, Transaction
-from sqlalchemy import select
+from sqlalchemy import select, or_
 
 async def create_account(db: AsyncSession,
                          task: CreateAccount):
@@ -94,6 +94,14 @@ async def transaction(db: AsyncSession, task: Transaction):
 
     reciever_account.balance+=task.money
 
+    log = TransactionLog(
+        sender_id=sender_account.id,
+        reciever_id=reciever_account.id,
+        amount=task.money,
+        status='complete'
+
+    )
+    db.add(log)
     await db.commit()
     await db.refresh(sender_account)
     await db.refresh(reciever_account)
@@ -105,6 +113,19 @@ async def transaction(db: AsyncSession, task: Transaction):
         "sender_new_balance": sender_account.balance,
         "status": "success"
     }
+
+async def get_transaction_history(db: AsyncSession, account_id:int):
+    stmt = select(TransactionLog).where(or_(
+        TransactionLog.sender_id == account_id,
+        TransactionLog.reciever_id == account_id
+    ))
+    result = await db.execute(stmt)
+    logs = result.scalars().all()
+    return logs
+
+
+
+
 
 
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import get_db
-from project.logic import deposit, create_account, withdraw, transaction, get_account
-from project.schemas import Deposit, Showbalance, CreateAccount, Withdraw, Transaction, TransationResponce
+from project.logic import deposit, create_account, withdraw, transaction, get_account, get_transaction_history
+from project.schemas import Deposit, Showbalance, CreateAccount, Withdraw, Transaction, TransationResponce, TransactionHistory
 
 router = APIRouter(prefix='/api')
 
@@ -43,4 +43,8 @@ async def transaction_endpoint(task: Transaction,
         return await transaction(db, task)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    
+
+@router.get('/transaction_history', response_model=list[TransactionHistory])
+async def transaction_history_endpoint(account_id: int,
+                                       db: AsyncSession = Depends(get_db)):
+    return await get_transaction_history(db, account_id)

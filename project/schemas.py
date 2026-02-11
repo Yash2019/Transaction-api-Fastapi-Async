@@ -27,10 +27,18 @@ class Transaction(BaseModel):
     reciever_id: int
 
 class TransationResponce(BaseModel):
-
     sender_id: int
     receiver_id: int
     amount: Decimal
     sender_new_balance: Decimal
     status: str
+
+class TransactionHistory(BaseModel):
+    sender_id:int
+    reciever_id:int
+    amount:Decimal
+    status:str
+
+    class config:
+        from_attributes = True
 
