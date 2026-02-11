@@ -30,16 +30,6 @@ A transaction engine built with FastAPI that handles deposits, withdrawals, and 
 | POST | `/api/transaction` | Transfer money between accounts |
 | GET | `/api/transaction_history` | Get all transactions for an account |
 
-## Screenshots
-
-![Swagger Overview](/home/yash/Pictures/Screenshots/Screenshot from 2026-02-11 18-32-11.png)
-
-![Create Account](/home/yash/Pictures/Screenshots/overview.png)
-
-![Transaction](screenshots/transaction.png)
-
-![Transaction History](screenshots/transaction_history.png)
-
 ## Technical Challenges Solved
 
 ### Atomicity
