@@ -34,7 +34,7 @@ A transaction engine built with FastAPI that handles deposits, withdrawals, and 
 
 ![Swagger Overview](/home/yash/Pictures/Screenshots/Screenshot from 2026-02-11 18-32-11.png)
 
-![Create Account](screenshots/create_account.png)
+![Create Account](/home/yash/Pictures/Screenshots/overview.png)
 
 ![Transaction](screenshots/transaction.png)
 
