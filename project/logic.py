@@ -18,6 +18,15 @@ async def create_account(db: AsyncSession,
     await db.refresh(new_account)
     return new_account
 
+async def get_account(db: AsyncSession, account_id: int):
+    stmt = select(Account).where(Account.id == account_id)
+    result = await db.execute(stmt)
+    account = result.scalars().first()
+
+    if account:
+        return account
+    raise ValueError('Account not found')
+
 
 async def deposit(db: AsyncSession, task:Deposit):
     if task.money<=0:
